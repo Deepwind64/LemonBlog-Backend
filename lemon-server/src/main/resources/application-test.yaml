@@ -1,0 +1,6 @@
+lemon:
+  file:
+    path: /home/deepwind/website/lemon-blog/file/
+    picpath: /home/deepwind/website/lemon-blog/file/pic/
+  server:
+    location: https://pd54419854.imdo.co

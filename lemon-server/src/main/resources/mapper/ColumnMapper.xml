@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bluemsun.lemonserver.dao.ColumnMapper">
+
+    <select id="getColumnBlogName" resultType="integer">
+        select blog_mto_column_blog_id from blog_mto_column where blog_mto_column_column_id=#{columnId}
+    </select>
+
+    <sql id="BlogAlias">
+        blog_id AS id,blog_title AS title,blog_brief AS brief,blog_content AS content,blog_collect_num AS collectNum,blog_comment_num AS commentNum,blog_like_num AS likeNum,blog_read_num AS readNum,blog_label AS label,user_id AS autherId,blog_status AS status,blog.create_time,blog.update_time
+    </sql>
+
+    <select id="getColumnBlogs" resultType="com.bluemsun.lemonpojo.entity.Blog">
+        select <include refid="BlogAlias"></include>
+        from blog left join blog_mto_column bmc on blog.blog_id = bmc.blog_mto_column_blog_id
+        where bmc.blog_mto_column_column_id=#{columnId}
+    </select>
+</mapper>

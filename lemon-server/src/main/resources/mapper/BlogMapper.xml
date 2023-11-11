@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bluemsun.lemonserver.dao.BlogMapper">
+
+    <select id="getCollectionContent" resultType="com.bluemsun.lemonpojo.entity.Blog">
+        select blog.blog_id as id,blog.blog_title as title from blog left join blog_mto_collection bmc on blog.blog_id = bmc.blog_id
+        where bmc.collection_id=#{collectionId}
+    </select>
+
+    <select id="isCollected" resultType="Boolean">
+        select count(*)>=1 from collection left join blog_mto_collection bmc on collection.collection_id = bmc.collection_id
+        where collection.user_id=#{userId} and bmc.blog_id=#{blogId}
+    </select>
+
+    <select id="searchBlog" resultType="com.bluemsun.lemonpojo.entity.Blog">
+        select <include refid="BlogAlias"></include>
+            from blog where match(blog_title,blog_title,blog_content)
+        against (#{content} in NATURAL LANGUAGE MODE)
+            and blog_status=1
+    </select>
+
+    <select id="searchUser" resultType="com.bluemsun.lemonpojo.entity.Userinfo">
+        select <include refid="UserAlias"></include>
+            from userinfo where match(userinfo_nickname, userinfo_intro, userinfo_profession)
+        against (#{content} in NATURAL LANGUAGE MODE)
+    </select>
+
+    <sql id="BlogAlias">
+        blog_id AS id,blog_title AS title,blog_brief AS brief,blog_content AS content,blog_collect_num AS collectNum,blog_comment_num AS commentNum,blog_like_num AS likeNum,blog_read_num AS readNum,blog_label AS label,user_id AS autherId,blog_status AS status,create_time,update_time
+    </sql>
+    <sql id="UserAlias">
+        userinfo_id AS id,userinfo_nickname AS nickname,userinfo_sex AS sex,userinfo_birthday AS birthday,userinfo_intro AS intro,userinfo_email AS email,userinfo_qq AS qq,userinfo_profession AS profession,userinfo_label AS label,user_id,userinfo_avatar_pic_id AS avatarId,create_time,update_time
+    </sql>
+</mapper>
+

@@ -1,0 +1,6 @@
+lemon:
+  file:
+    path: D:/test/
+    picpath: D:/test/pic/
+  server:
+    location: http://localhost:8080
